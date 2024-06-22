@@ -1,4 +1,5 @@
 import { Obstacle, Sink } from "../objects";
+import { unpad } from "../padding";
 
 export class Ball {
   private x: number;
@@ -36,7 +37,13 @@ export class Ball {
     this.onFinish = onFinish;
   }
 
-  draw() {}
+  draw() {
+    this.ctx.beginPath();
+    this.ctx.arc(unpad(this.x), unpad(this.y), this.radius, 0, Math.PI * 2);
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+    this.ctx.closePath();
+  }
 
   update() {}
 }
