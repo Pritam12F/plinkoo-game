@@ -1,5 +1,6 @@
+import { gravity, horizontalFriction, verticalFriction } from "../constant";
 import { Obstacle, Sink } from "../objects";
-import { unpad } from "../padding";
+import { pad, unpad } from "../padding";
 
 export class Ball {
   private x: number;
@@ -45,5 +46,42 @@ export class Ball {
     this.ctx.closePath();
   }
 
-  update() {}
+  update() {
+    this.vy += gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Collision with obstacles
+    this.obstacles.forEach((obstacle) => {
+      const dist = Math.hypot(this.x - obstacle.x, this.y - obstacle.y);
+      if (dist < pad(this.radius + obstacle.radius)) {
+        // Calculate collision angle
+        const angle = Math.atan2(this.y - obstacle.y, this.x - obstacle.x);
+
+        // Reflect velocity
+        const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        this.vx = Math.cos(angle) * speed * horizontalFriction;
+        this.vy = Math.sin(angle) * speed * verticalFriction;
+
+        const overlap = this.radius + obstacle.radius - unpad(dist);
+        this.x += pad(Math.cos(angle) * overlap);
+        this.y += pad(Math.sin(angle) * overlap);
+      }
+    });
+
+    // Collision with sinks
+    for (let i = 0; i < this.sinks.length; i++) {
+      const sink = this.sinks[i];
+      if (
+        unpad(this.x) > sink.x - sink.width / 2 &&
+        unpad(this.x) < sink.x + sink.width / 2 &&
+        unpad(this.y) + this.radius > sink.y - sink.height / 2
+      ) {
+        this.vx = 0;
+        this.vy = 0;
+        this.onFinish(i);
+        break;
+      }
+    }
+  }
 }
