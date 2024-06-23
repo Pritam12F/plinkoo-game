@@ -19,8 +19,6 @@ export class Ball {
     y: number,
     radius: number,
     color: string,
-    vx: number,
-    vy: number,
     ctx: CanvasRenderingContext2D,
     obstacles: Obstacle[],
     sinks: Sink[],
@@ -30,8 +28,8 @@ export class Ball {
     this.y = y;
     this.radius = radius;
     this.color = color;
-    this.vx = vx;
-    this.vy = vy;
+    this.vx = 0;
+    this.vy = 0;
     this.ctx = ctx;
     this.obstacles = obstacles;
     this.sinks = sinks;
