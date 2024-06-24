@@ -1,5 +1,5 @@
 import { Simulation } from "../components";
 
-export const SimulationPage = () => {
+export function SimulationPage() {
   return <Simulation />;
-};
+}

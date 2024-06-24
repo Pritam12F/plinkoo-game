@@ -1,5 +1,5 @@
-import { AddBall } from "../components/Game";
+import { Game } from "../components";
 
 export const GamePage = () => {
-  return <AddBall />;
+  return <Game />;
 };

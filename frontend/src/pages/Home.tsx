@@ -1,6 +1,7 @@
-import { FoundIssue, Quotes, Simulate } from "../components";
+import { Simulate } from "../components/Simulate";
+import { Quotes, FoundIssue } from "../components";
 
-export const Home = () => {
+export function Home() {
   return (
     <div className="">
       <div className="flex flex-col lg:flex-row  items-center justify-between ">
@@ -10,4 +11,4 @@ export const Home = () => {
       <FoundIssue />
     </div>
   );
-};
+}

@@ -1,29 +1,31 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BallManager } from "../game/classes/ballManager";
 import axios from "axios";
 import { Button } from "./ui";
 
-export const AddBall = () => {
+export function Game() {
   const [ballManager, setBallManager] = useState<BallManager>();
   const canvasRef = useRef<any>();
 
   useEffect(() => {
     if (canvasRef.current) {
       const ballManager = new BallManager(
-        canvasRef as unknown as HTMLCanvasElement
+        canvasRef.current as unknown as HTMLCanvasElement
       );
       setBallManager(ballManager);
     }
   }, [canvasRef]);
 
   return (
-    <div>
+    <div className="flex items-center gap-x-32">
       <canvas ref={canvasRef} width="800" height="800"></canvas>
       <Button
         onClick={async () => {
-          const res = await axios.post("http://localhost:3000/game");
+          const response = await axios.post("http://localhost:3000/game", {
+            data: 1,
+          });
           if (ballManager) {
-            ballManager.addBall(res.data.point);
+            ballManager.addBall(response.data.point);
           }
         }}
       >
@@ -31,4 +33,4 @@ export const AddBall = () => {
       </Button>
     </div>
   );
-};
+}

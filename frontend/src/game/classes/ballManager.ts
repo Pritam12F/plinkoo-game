@@ -16,24 +16,24 @@ export class BallManager {
   private obstacles: Obstacle[];
   private sinks: Sink[];
   private requestId?: number;
-  private onFinish?: (index: number, startX: number) => void;
+  private onFinish?: (index: number, startX?: number) => void;
 
   constructor(
     canvasRef: HTMLCanvasElement,
-    onFinish?: (index: number, startX: number) => void
+    onFinish?: (index: number, startX?: number) => void
   ) {
-    this.onFinish = onFinish;
+    this.balls = [];
     this.canvasRef = canvasRef;
     this.ctx = this.canvasRef.getContext("2d")!;
     this.obstacles = createObstacles();
     this.sinks = createSink();
-    this.balls = [];
     this.update();
+    this.onFinish = onFinish;
   }
 
-  addBall(startX: number) {
+  addBall(startX?: number) {
     const newBall = new Ball(
-      startX || pad(WIDTH / 2 - 13),
+      startX || pad(WIDTH / 2 + 13),
       pad(50),
       ballRadius,
       "red",
@@ -45,7 +45,6 @@ export class BallManager {
         this.onFinish?.(index, startX);
       }
     );
-
     this.balls.push(newBall);
   }
 
@@ -56,7 +55,7 @@ export class BallManager {
       this.ctx.arc(
         unpad(obstacle.x),
         unpad(obstacle.y),
-        obstacleRadius,
+        obstacle.radius,
         0,
         Math.PI * 2
       );
@@ -68,14 +67,23 @@ export class BallManager {
   getColor(index: number) {
     if (index < 3 || index > this.sinks.length - 3) {
       return { background: "#ff003f", color: "white" };
-    } else if (index < 6 || index > this.sinks.length - 6) {
-      return { background: "#ff7f00", color: "white" };
-    } else {
-      return { background: "#7fff00", color: "black" };
     }
+    if (index < 6 || index > this.sinks.length - 6) {
+      return { background: "#ff7f00", color: "white" };
+    }
+    if (index < 9 || index > this.sinks.length - 9) {
+      return { background: "#ffbf00", color: "black" };
+    }
+    if (index < 12 || index > this.sinks.length - 12) {
+      return { background: "#ffff00", color: "black" };
+    }
+    if (index < 15 || index > this.sinks.length - 15) {
+      return { background: "#bfff00", color: "black" };
+    }
+    return { background: "#7fff00", color: "black" };
   }
-
   drawSinks() {
+    this.ctx.fillStyle = "green";
     const SPACING = obstacleRadius * 2;
     for (let i = 0; i < this.sinks.length; i++) {
       this.ctx.fillStyle = this.getColor(i).background;

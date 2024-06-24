@@ -1,9 +1,11 @@
 import express from "express";
 import { outcomes } from "./outcomes";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 const TOTAL_DROPS = 16;
 

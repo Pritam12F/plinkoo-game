@@ -1,11 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BallManager } from "../game/classes/ballManager";
 import { pad } from "../game/padding";
 import { WIDTH } from "../game/constant";
 
 export const Simulate = () => {
   const canvasRef = useRef<any>();
-  const [outcomes, setOutcomes] = useState<{ [index: number]: number[] }>({
+  let [outputs, setOutputs] = useState<{ [key: number]: number[] }>({
     0: [],
     1: [],
     2: [],
@@ -23,12 +23,12 @@ export const Simulate = () => {
     14: [],
     15: [],
     16: [],
+    17: [],
   });
-  const [ballManager, setBallManger] = useState<BallManager>();
 
   async function simulate(ballManager: BallManager) {
     let i = 0;
-    while (true) {
+    while (1) {
       i++;
       ballManager.addBall(pad(WIDTH / 2 + 20 * (Math.random() - 0.5)));
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -38,26 +38,27 @@ export const Simulate = () => {
   useEffect(() => {
     if (canvasRef.current) {
       const ballManager = new BallManager(
-        canvasRef as unknown as HTMLCanvasElement,
-        (index: number, startX: number) => {
-          setOutcomes({
-            ...outcomes,
-            [index]: [...(outcomes[index] as number[]), startX],
+        canvasRef.current as unknown as HTMLCanvasElement,
+        (index: number, startX?: number) => {
+          setOutputs((outputs: any) => {
+            return {
+              ...outputs,
+              [index]: [...(outputs[index] as number[]), startX],
+            };
           });
         }
       );
-      setBallManger(ballManager);
-    }
-    simulate(ballManager!);
+      simulate(ballManager);
 
-    return () => {
-      ballManager?.stop();
-    };
+      return () => {
+        ballManager.stop();
+      };
+    }
   }, [canvasRef]);
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <canvas width="800" height="800" ref={canvasRef}></canvas>
+    <div className="flex flex-col items-center justify-center">
+      <canvas ref={canvasRef} width="800" height="800"></canvas>
     </div>
   );
 };
