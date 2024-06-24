@@ -1,15 +1,21 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { Button } from "./components/ui/Button";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Footer, Navbar } from "./components";
+import { Home } from "./pages/Home";
+import { SimulationPage } from "./pages/Simulation";
+import { GamePage } from "./pages/Game";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <Button>Click me</Button>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/simulation" element={<SimulationPage />} />
+          <Route path="/game" element={<GamePage />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
     </>
   );
 }
