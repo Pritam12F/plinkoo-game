@@ -16,11 +16,11 @@ export class BallManager {
   private obstacles: Obstacle[];
   private sinks: Sink[];
   private requestId?: number;
-  private onFinish?: (index: number, startX?: number) => void;
+  private onFinish?: (index: number, startX: number) => void;
 
   constructor(
     canvasRef: HTMLCanvasElement,
-    onFinish?: (index: number, startX?: number) => void
+    onFinish?: (index: number, startX: number) => void
   ) {
     this.onFinish = onFinish;
     this.canvasRef = canvasRef;
@@ -28,6 +28,7 @@ export class BallManager {
     this.obstacles = createObstacles();
     this.sinks = createSink();
     this.balls = [];
+    this.update();
   }
 
   addBall(startX: number) {
@@ -39,12 +40,10 @@ export class BallManager {
       this.ctx,
       this.obstacles,
       this.sinks,
-      this.onFinish
-        ? this.onFinish
-        : (index) => {
-            this.balls = this.balls.filter((ball) => ball !== newBall);
-            this.onFinish?.(index, startX);
-          }
+      (index) => {
+        this.balls = this.balls.filter((ball) => ball !== newBall);
+        this.onFinish?.(index, startX);
+      }
     );
 
     this.balls.push(newBall);
@@ -81,6 +80,7 @@ export class BallManager {
     for (let i = 0; i < this.sinks.length; i++) {
       this.ctx.fillStyle = this.getColor(i).background;
       const sink = this.sinks[i];
+      this.ctx.font = "normal 13px Arial";
       this.ctx.fillRect(
         sink.x,
         sink.y - sink.height / 2,
@@ -89,7 +89,7 @@ export class BallManager {
       );
       this.ctx.fillStyle = this.getColor(i).color;
       this.ctx.fillText(
-        sink.multiplier.toString() + "x",
+        sink?.multiplier?.toString() + "x",
         sink.x - 15 + sinkWidth / 2,
         sink.y
       );
