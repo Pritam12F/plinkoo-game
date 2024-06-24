@@ -29,7 +29,7 @@ const MULTIPLIERS: { [key: number]: number } = {
   16: 16,
 };
 
-app.post("/game", (req, res) => {
+app.post("/", (req, res) => {
   let outcome = 0;
   let pattern = [];
 
