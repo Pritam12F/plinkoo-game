@@ -5,6 +5,7 @@ import { WIDTH } from "../game/constant";
 
 export const Simulate = () => {
   const canvasRef = useRef<any>();
+  //@ts-ignore
   let [outputs, setOutputs] = useState<{ [key: number]: number[] }>({
     0: [],
     1: [],

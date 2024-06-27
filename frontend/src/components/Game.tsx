@@ -21,7 +21,7 @@ export function Game() {
       <canvas ref={canvasRef} width="800" height="800"></canvas>
       <Button
         onClick={async () => {
-          const response = await axios.post(process.env.BACKEND_API, {
+          const response = await axios.post(process.env.BACKEND_API ?? "", {
             data: 1,
           });
           if (ballManager) {
