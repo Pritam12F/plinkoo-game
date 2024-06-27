@@ -29,7 +29,7 @@ export function Game() {
           }
         }}
       >
-        Add ball
+        Add ball!
       </Button>
     </div>
   );
